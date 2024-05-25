@@ -1,0 +1,21 @@
+https://platform.stratascratch.com/coding/10172-best-selling-item?code_type=2
+
+
+\\
+Find the best selling item for each month (no need to separate months by year) where the biggest total invoice was paid.
+The best selling item is calculated using the formula (unitprice * quantity).
+Output the month, the description of the item along with the amount paid.
+\\
+
+import pandas as pd
+import numpy as np
+
+online_retail['month'] = online_retail['invoicedate'].apply(pd.to_datetime).dt.month
+online_retail['paid'] = online_retail['unitprice']*online_retail['quantity']
+online_retail['totalpaid'] = online_retail.groupby(['month','description'])['paid'].transform('sum')
+
+result = online_retail[['month','description','totalpaid']].drop_duplicates()
+result["rank"] = result.groupby('month')['totalpaid'].rank(method = "max", ascending =False
+)
+
+result = result[result["rank"] == 1][['month', 'description','totalpaid']].sort_values(['month'])
