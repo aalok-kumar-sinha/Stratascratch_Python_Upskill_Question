@@ -1,0 +1,20 @@
+https://platform.stratascratch.com/coding/9606-differences-in-movie-ratings?code_type=2
+
+\\
+Calculate the average lifetime rating and rating from the movie with second biggest id across all actors and all films they had acted in. Remove null ratings from the calculation.
+Role type is "Normal Acting". Output a list of actors, their average lifetime rating, rating from the film with the second biggest id (use id column),
+and the absolute difference between the two ratings.
+
+DataFrames: nominee_filmography, nominee_information
+\\
+
+# Import your libraries
+import pandas as pd
+import numpy as np
+
+# Start writing code
+non_null_df = nominee_filmography.loc[(nominee_filmography["rating"].notnull()) & (nominee_filmography["role_type"]=="Normal Acting")]
+non_null_df['lifetime_avg'] = non_null_df.groupby("name")["rating"].transform(np.mean)
+non_null_df["movie_rank"]=non_null_df.groupby("name")["id"].rank(ascending=False)
+non_null_df["variance"] = abs(non_null_df["lifetime_avg"] - non_null_df["rating"])
+non_null_df.loc[non_null_df["movie_rank"]==2][["name","rating","lifetime_avg","variance"]]
