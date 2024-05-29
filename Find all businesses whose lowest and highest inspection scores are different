@@ -1,0 +1,15 @@
+https://platform.stratascratch.com/coding/9731-find-all-businesses-whose-lowest-and-highest-inspection-scores-are-different?code_type=2
+
+//
+Find all businesses whose lowest and highest inspection scores are different.
+Output the corresponding business name and the lowest and highest scores of each business.
+HINT: you can assume there are no different businesses that share the same business name
+Order the result based on the business name in ascending order.
+
+DataFrame: sf_restaurant_health_violations
+//
+df=sf_restaurant_health_violations.groupby('business_name').inspection_score.agg([min,max]).reset_index()
+
+df=df[df['min']!=df['max']]
+df.columns=['business_name','min_score','max_score']
+df.dropna()
