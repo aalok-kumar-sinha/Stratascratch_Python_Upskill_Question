@@ -1,0 +1,39 @@
+https://platform.stratascratch.com/coding/10017-year-over-year-churn?code_type=2
+
+\\
+Find how the number of drivers that have churned changed in each year compared to the previous one.
+Output the year (specifically, you can use the year the driver left Lyft) along with the corresponding number of churns in that year,
+the number of churns in the previous year, and an indication on whether the number has been increased (output the value 'increase'), 
+decreased (output the value 'decrease') or stayed the same (output the value 'no change').
+
+DataFrame: lyft_drivers
+\\
+
+import numpy as np
+
+import pandas as pd
+
+lyft_drivers["end_date"] = lyft_drivers["end_date"].apply(
+    pd.to_datetime
+)
+lyft_drivers["churn"] = (lyft_drivers["end_date"].notnull()).astype(
+    int
+)
+
+result = (
+    lyft_drivers.groupby(["end_date"])["churn"]
+    .sum()
+    .to_frame("total_churn")
+    .reset_index()
+)
+result["prev_year_churn"] = result["total_churn"].shift(1)
+result["prev_year_churn"][0] = 0
+result["inc/dec"] = np.select(
+    [
+        result.total_churn > result.prev_year_churn,
+        result.total_churn < result.prev_year_churn,
+        result.total_churn == result.prev_year_churn,
+    ],
+    ["increase", "decrease", "no change"],
+)
+result
