@@ -1,0 +1,19 @@
+https://platform.stratascratch.com/coding/10362-top-monthly-sellers?code_type=2
+
+//
+You are provided with a transactional dataset from Amazon that contains detailed
+information about sales across different products and marketplaces.
+Your task is to list the top 3 sellers in each product category for January.
+
+
+The output should contain 'seller_id' , 'total_sales' ,'product_category' , 'market_place', and 'month'.
+
+DataFrame: sales_data
+\\
+
+import pandas as pd
+
+sales_data['month'] = sales_data['month'].astype(str)
+january_sales = sales_data[sales_data['month'].str.startswith('2024-01')]
+
+top_sellers_by_cat = january_sales.groupby('product_category').apply(lambda x: x.nlargest(3, 'total_sales', keep = 'all')).reset_index(drop = True)
