@@ -1,0 +1,17 @@
+https://platform.stratascratch.com/coding/9986-find-the-top-5-least-paid-employees-for-each-job-title?code_type=2
+
+\\
+Find the top 5 least paid employees for each job title.
+Output the employee name, job title and total pay with benefits for the first 5 least paid employees. Avoid gaps in ranking.
+\\
+
+import pandas as pd
+df = pd.read_csv('sf_public_salaries.csv')
+def top_5_least_salaries(group):
+    return group.nsmallest(5, 'totalpaybenefits')
+    
+top_5_least_salaries = df.groupby('jobtitle').apply(top_5_least_salaries)
+
+result = top_5_least_paide_per_job[['employeename', 'jobtitle', 'totalpaybenefits']]
+
+print(result)
