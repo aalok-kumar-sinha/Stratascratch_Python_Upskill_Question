@@ -1,0 +1,15 @@
+https://platform.stratascratch.com/coding/9859-find-the-first-50-records-of-the-dataset?code_type=2
+
+\\
+Find the first 50% records of the dataset.
+
+DataFrame: worker
+\\
+
+import pandas as pd
+
+df = worker.sort_values(by='worker_id')
+half_row = len(df)//2
+first_half = df.iloc[:half_row]
+first_half.reset_index(drop=True, inplace=True)
+print(first_half)
