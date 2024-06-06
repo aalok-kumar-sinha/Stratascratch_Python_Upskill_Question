@@ -1,0 +1,28 @@
+https://platform.stratascratch.com/coding/2087-negative-reviews-in-new-locations?code_type=2
+
+
+//
+Find stores that were opened in the second half of 2021 with more than 20% of their reviews being negative.
+A review is considered negative when the score given by a customer is below 5.
+Output the names of the stores together with the ratio of negative reviews to positive ones.
+
+DataFrames: instacart_reviews, instacart_stores
+//
+
+df = instacart_reviews.merge(instacart_stores, left_on='store_id', right_on='id')
+df = df[(df['opening_date'] >= '2021-07-01') & (df['opening_date'] <= '2021-12-31')]
+
+df['is_negative'] = 0
+df.loc[df['score'] < 5, 'is_negative'] = 1
+
+df = (
+    df.groupby("name")["is_negative"]
+    .agg(["sum", "count"])
+    .reset_index()
+)
+
+df["negative_percentage"] = df["sum"] / df["count"]
+df["negative_positive_ratio"] = df["sum"] / (df["count"] - df["sum"])
+result = df[df["negative_percentage"] > 0.2][
+    ["name", "negative_positive_ratio"]
+]
