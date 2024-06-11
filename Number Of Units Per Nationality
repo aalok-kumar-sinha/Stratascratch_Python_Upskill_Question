@@ -1,0 +1,15 @@
+https://platform.stratascratch.com/coding/10156-number-of-units-per-nationality?code_type=2
+
+//
+Find the number of apartments per nationality that are owned by people under 30 years old.
+Output the nationality along with the number of apartments.
+Sort records by the apartments count in descending order.
+
+DataFrames: airbnb_hosts, airbnb_units
+//
+
+import pandas as pd
+
+df=  pd.merge(airbnb_units, airbnb_hosts, left_on='host_id', right_on='host_id', how='left')
+df =  df[(df['unit_type']=='Apartment') & (df['age']<30)]
+res = df.groupby('nationality')['unit_id'].nunique().to_frame('count').reset_index().sort_values('count')
