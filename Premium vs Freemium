@@ -1,0 +1,20 @@
+https://platform.stratascratch.com/coding/10300-premium-vs-freemium?code_type=2
+
+\\
+Find the total number of downloads for paying and non-paying users by date.
+Include only records where non-paying customers have more downloads than paying customers. 
+The output should be sorted by earliest date first and contain 3 columns date, non-paying downloads, paying downloads.
+
+DataFrames: ms_user_dimension, ms_acc_dimension, ms_download_facts
+\\
+
+import pandas as pd
+
+
+df = pd.merge(ms_user_dimension, ms_acc_dimension, left_on='acc_id', right_on='acc_id', how='left')
+res = pd.merge(ms_download_facts, df, left_on='user_id', right_on='user_id', how='left')
+
+res = res.groupby(['date', 'paying_customer'])['downloads'].sum().reset_index()
+
+final = res.pivot(index='date',columns='paying_customer',values='downloads').reset_index()
+result = final.loc[final['no']>final['yes']].sort_values('date')
