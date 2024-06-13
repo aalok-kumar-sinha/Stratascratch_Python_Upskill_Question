@@ -1,0 +1,21 @@
+https://platform.stratascratch.com/coding/10161-ranking-hosts-by-beds?code_type=2
+
+//
+Rank each host based on the number of beds they have listed.
+The host with the most beds should be ranked 1 and the host with the least number of beds should be ranked last. 
+Hosts that have the same number of beds should have the same rank but there should be no gaps between ranking values.
+A host can also own multiple properties.
+Output the host ID, number of beds, and rank from highest rank to lowest.
+
+DataFrame: airbnb_apartments
+//
+
+import pandas as pd
+
+df = airbnb_apartments
+
+beds_df = df.groupby('host_id')['n_beds'].sum().reset_index()
+
+beds_df['rank'] = beds_df["n_beds"].rank(ascending=False, method='dense')
+
+beds_df.sort_values('rank')
